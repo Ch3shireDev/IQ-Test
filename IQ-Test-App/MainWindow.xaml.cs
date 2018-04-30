@@ -37,12 +37,12 @@ namespace IQ_Test_App
             }
             d1 = DateTime.Now;
             StartButton.IsEnabled = false;
-            numTests++;
-            if (numTests % 5 == 0)
+            if (numTests % 5 == 0 && numTests != 0)
             {
                 DigitsCount.Value++;
                 LabelB_Update(DigitsCount.Value);
             }
+            numTests++;
             Digits_TextBox.Focus();
 
             digitsList = TestCase(time, numDigits);

@@ -24,6 +24,17 @@ namespace IQ_Test_App
 
         private async Task StartTesting()
         {
+            time = (int)TimeChange.Value;
+            numDigits = (int)DigitsCount.Value;
+            System.Diagnostics.Debug.WriteLine(numDigits);
+            if (numDigits < 8)
+            {
+                Digits_TextBox.FontSize = 48;
+            }
+            else if (numDigits < 12)
+            {
+                Digits_TextBox.FontSize = 36;
+            }
             d1 = DateTime.Now;
             StartButton.IsEnabled = false;
             numTests++;
@@ -32,9 +43,8 @@ namespace IQ_Test_App
                 DigitsCount.Value++;
                 LabelB_Update(DigitsCount.Value);
             }
-            Cyfry_TextBox.Focus();
-            time = (int)TimeChange.Value;
-            numDigits = (int)DigitsCount.Value;
+            Digits_TextBox.Focus();
+
             digitsList = TestCase(time, numDigits);
             await Task.Delay((int)TimeChange.Value * 1000);
             ListenForDigits();
@@ -45,6 +55,7 @@ namespace IQ_Test_App
             StartButton.IsEnabled = true;
             allowDigits = false;
             numTests = 0;
+            Digits_TextBox.Text = "";
         }
 
         private void SaveLists(List<int> listA, List<int> listB)
@@ -75,18 +86,18 @@ namespace IQ_Test_App
             allowDigits = false;
             var x = digitsList.Except(givenDigits).ToList();
             var y = givenDigits.Except(digitsList).ToList();
-            var brush = Cyfry_TextBox.Foreground;
+            var brush = Digits_TextBox.Foreground;
             if (x.Count == 0 && y.Count == 0)
             {
-                Cyfry_TextBox.Foreground = Brushes.SpringGreen;
+                Digits_TextBox.Foreground = Brushes.SpringGreen;
             }
             else
             {
-                Cyfry_TextBox.Foreground = Brushes.Red;
+                Digits_TextBox.Foreground = Brushes.Red;
             }
             await Task.Delay(500);
-            Cyfry_TextBox.Foreground = brush;
-            Cyfry_TextBox.Text = "";
+            Digits_TextBox.Foreground = brush;
+            Digits_TextBox.Text = "";
             await Task.Delay(200);
             StartTesting();
         }
@@ -97,7 +108,7 @@ namespace IQ_Test_App
 
         private void ListenForDigits()
         {
-            Cyfry_TextBox.Text = "";
+            Digits_TextBox.Text = "";
             allowDigits = true;
             givenDigits = new List<int>();
             numCheckedDigits = 0;
@@ -111,10 +122,10 @@ namespace IQ_Test_App
             if (givenDigits.Count < digitsList.Count)
             {
                 givenDigits.Add(n);
-                Cyfry_TextBox.Text += n.ToString();
+                Digits_TextBox.Text += n.ToString();
                 if (givenDigits.Count < digitsList.Count)
                 {
-                    Cyfry_TextBox.Text += ", ";
+                    Digits_TextBox.Text += ", ";
                 }
                 else
                 {
@@ -187,14 +198,14 @@ namespace IQ_Test_App
             for (int i = 0; i < 20; i++) numbersList.Add(i % 10);
             do numbersList = numbersList.OrderBy(a => Guid.NewGuid()).ToList();
             while (!CheckForDifference(LastNumbers, numbersList, digits));
-            Cyfry_TextBox.Text = "";
-            Cyfry_TextBox.FontSize = 48;
+            Digits_TextBox.Text = "";
+            //Digits_TextBox.FontSize = 48;
             List<int> Out = new List<int>();
             for (int i = 0; i < digits; i++)
             {
                 Out.Add(numbersList[i]);
-                Cyfry_TextBox.Text += numbersList[i];
-                if (i < digits - 1) Cyfry_TextBox.Text += ", ";
+                Digits_TextBox.Text += numbersList[i];
+                if (i < digits - 1) Digits_TextBox.Text += ", ";
             }
             LastNumbers = new List<int>(numbersList);
             return Out;

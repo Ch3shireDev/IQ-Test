@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.IO;
 
 namespace IQ_Test_App
 {
@@ -16,16 +16,18 @@ namespace IQ_Test_App
             InitializeComponent();
         }
 
-        int time = 0;
-        int numDigits = 0;
+        private int time = 0;
+        private int numDigits = 0;
 
-        int numTests = 0;
+        private int numTests = 0;
+        private DateTime d1;
 
-        async Task StartTesting()
+        private async Task StartTesting()
         {
+            d1 = DateTime.Now;
             StartButton.IsEnabled = false;
             numTests++;
-            if(numTests % 5 == 0)
+            if (numTests % 5 == 0)
             {
                 DigitsCount.Value++;
                 LabelB_Update(DigitsCount.Value);
@@ -34,23 +36,23 @@ namespace IQ_Test_App
             time = (int)TimeChange.Value;
             numDigits = (int)DigitsCount.Value;
             digitsList = TestCase(time, numDigits);
-            await Task.Delay((int) TimeChange.Value * 1000);
+            await Task.Delay((int)TimeChange.Value * 1000);
             ListenForDigits();
         }
 
-        void BreakTesting()
+        private void BreakTesting()
         {
             StartButton.IsEnabled = true;
             allowDigits = false;
             numTests = 0;
         }
 
-        void SaveLists(List<int> listA, List<int> listB)
+        private void SaveLists(List<int> listA, List<int> listB)
         {
             string path = "output.txt";
             StreamWriter output = new StreamWriter(path, true);
             output.Write(DateTime.Now + " " + time + " " + numDigits + " [");
-            foreach(var x in listA)
+            foreach (var x in listA)
             {
                 output.Write(x.ToString() + " ");
             }
@@ -59,18 +61,22 @@ namespace IQ_Test_App
             {
                 output.Write(x.ToString() + " ");
             }
-            output.WriteLine("]");
+            output.WriteLine("] " + interval);
             output.Close();
         }
 
-        async Task EndTesting()
+        private double interval = 0;
+
+        private async Task EndTesting()
         {
+            DateTime d2 = DateTime.Now;
+            interval = d2.Subtract(d1).TotalMilliseconds;
             SaveLists(digitsList, givenDigits);
             allowDigits = false;
             var x = digitsList.Except(givenDigits).ToList();
             var y = givenDigits.Except(digitsList).ToList();
             var brush = Cyfry_TextBox.Foreground;
-            if(x.Count == 0 && y.Count == 0)
+            if (x.Count == 0 && y.Count == 0)
             {
                 Cyfry_TextBox.Foreground = Brushes.SpringGreen;
             }
@@ -85,11 +91,11 @@ namespace IQ_Test_App
             StartTesting();
         }
 
-        bool allowDigits = false;
-        int numCheckedDigits = 0;
-        List<int> digitsList;
+        private bool allowDigits = false;
+        private int numCheckedDigits = 0;
+        private List<int> digitsList;
 
-        void ListenForDigits()
+        private void ListenForDigits()
         {
             Cyfry_TextBox.Text = "";
             allowDigits = true;
@@ -97,16 +103,16 @@ namespace IQ_Test_App
             numCheckedDigits = 0;
         }
 
-        List<int> givenDigits;
+        private List<int> givenDigits;
 
-        void SendDigit(int n)
+        private void SendDigit(int n)
         {
             if (!allowDigits) return;
             if (givenDigits.Count < digitsList.Count)
             {
                 givenDigits.Add(n);
                 Cyfry_TextBox.Text += n.ToString();
-                if(givenDigits.Count < digitsList.Count)
+                if (givenDigits.Count < digitsList.Count)
                 {
                     Cyfry_TextBox.Text += ", ";
                 }
@@ -132,10 +138,10 @@ namespace IQ_Test_App
             StartTesting();
         }
 
-        string secondsCountLabel;
-        string digitsCountLabel;
-        
-        void LabelA_Update(double value)
+        private string secondsCountLabel;
+        private string digitsCountLabel;
+
+        private void LabelA_Update(double value)
         {
             if (secondsCountLabel == null)
             {
@@ -144,7 +150,7 @@ namespace IQ_Test_App
             LabelA.Content = secondsCountLabel + " " + value + " s";
         }
 
-        void LabelB_Update(double value)
+        private void LabelB_Update(double value)
         {
             if (digitsCountLabel == null)
             {
@@ -153,9 +159,9 @@ namespace IQ_Test_App
             DigitLabel.Content = digitsCountLabel + " " + value;
         }
 
-        List<int> LastNumbers = new List<int>();
+        private List<int> LastNumbers = new List<int>();
 
-        bool CheckForDifference(List<int> before, List<int> after, int num)
+        private bool CheckForDifference(List<int> before, List<int> after, int num)
         {
             for (int i = 1; i < num; i++)
             {
@@ -168,14 +174,14 @@ namespace IQ_Test_App
             if (num < 8 && num - count > 0) return false;
 
             if (LastNumbers.Count < num) return true;
-            for(int i = 0; i < num; i++)
+            for (int i = 0; i < num; i++)
             {
                 if (before[i] == after[i]) return false;
             }
             return true;
         }
 
-        List<int> TestCase(int seconds, int digits)
+        private List<int> TestCase(int seconds, int digits)
         {
             List<int> numbersList = new List<int>();
             for (int i = 0; i < 20; i++) numbersList.Add(i % 10);

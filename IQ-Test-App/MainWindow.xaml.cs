@@ -22,11 +22,35 @@ namespace IQ_Test_App
         private int numTests = 0;
         private DateTime d1;
 
+        private void Undo()
+        {
+            if (givenDigits == null) return;
+            if (!allowDigits) return;
+            if (givenDigits.Count > 0)
+            {
+                givenDigits.RemoveAt(givenDigits.Count - 1);
+            }
+            Digits_TextBox.Text = "";
+            for (int i = 0; i < givenDigits.Count; i++)
+            {
+                Digits_TextBox.Text += givenDigits[i].ToString();
+                Digits_TextBox.Text += ", ";
+            }
+        }
+
         private async Task StartTesting()
         {
             time = (int)TimeChange.Value;
             numDigits = (int)DigitsCount.Value;
             System.Diagnostics.Debug.WriteLine(numDigits);
+            d1 = DateTime.Now;
+            StartButton.IsEnabled = false;
+            if (numTests % 5 == 0 && numTests != 0)
+            {
+                DigitsCount.Value++;
+                LabelB_Update(DigitsCount.Value);
+                numDigits = (int)DigitsCount.Value;
+            }
             if (numDigits < 8)
             {
                 Digits_TextBox.FontSize = 48;
@@ -35,13 +59,7 @@ namespace IQ_Test_App
             {
                 Digits_TextBox.FontSize = 36;
             }
-            d1 = DateTime.Now;
-            StartButton.IsEnabled = false;
-            if (numTests % 5 == 0 && numTests != 0)
-            {
-                DigitsCount.Value++;
-                LabelB_Update(DigitsCount.Value);
-            }
+
             numTests++;
             Digits_TextBox.Focus();
 
@@ -199,7 +217,6 @@ namespace IQ_Test_App
             do numbersList = numbersList.OrderBy(a => Guid.NewGuid()).ToList();
             while (!CheckForDifference(LastNumbers, numbersList, digits));
             Digits_TextBox.Text = "";
-            //Digits_TextBox.FontSize = 48;
             List<int> Out = new List<int>();
             for (int i = 0; i < digits; i++)
             {
@@ -216,6 +233,11 @@ namespace IQ_Test_App
             if (e.Key == Key.Escape)
             {
                 BreakTesting();
+            }
+            if (e.Key == Key.Back)
+            {
+                System.Diagnostics.Debug.WriteLine("aaa");
+                Undo();
             }
             string s = e.Key.ToString();
             if (s.Length == 0) return;

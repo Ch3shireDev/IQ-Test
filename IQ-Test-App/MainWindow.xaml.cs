@@ -45,22 +45,24 @@ namespace IQ_Test_App
             System.Diagnostics.Debug.WriteLine(numDigits);
             d1 = DateTime.Now;
             StartButton.IsEnabled = false;
-            if (numTests % 5 == 0 && numTests != 0)
+            if (progressive_CheckBox.IsChecked is true)
             {
-                DigitsCount.Value++;
-                LabelB_Update(DigitsCount.Value);
-                numDigits = (int)DigitsCount.Value;
-            }
-            if (numDigits < 8)
-            {
-                Digits_TextBox.FontSize = 48;
-            }
-            else if (numDigits < 12)
-            {
-                Digits_TextBox.FontSize = 36;
-            }
+                if (numTests % 5 == 0 && numTests != 0)
+                {
+                    DigitsCount.Value++;
+                    LabelB_Update(DigitsCount.Value);
+                    numDigits = (int)DigitsCount.Value;
+                }
+                if (numDigits < 8)
+                {
+                    Digits_TextBox.FontSize = 48;
+                }
+                else if (numDigits < 12)
+                {
+                    Digits_TextBox.FontSize = 36;
+                }
 
-            numTests++;
+            }
             Digits_TextBox.Focus();
 
             digitsList = TestCase(time, numDigits);
@@ -78,7 +80,12 @@ namespace IQ_Test_App
 
         private void SaveLists(List<int> listA, List<int> listB)
         {
-            string path = "output.txt";
+            string dir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Appdata\\Local\\IQ";
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+            string path = dir + "\\output.txt";
             StreamWriter output = new StreamWriter(path, true);
             output.Write(DateTime.Now + " " + time + " " + numDigits + " [");
             foreach (var x in listA)
@@ -108,6 +115,7 @@ namespace IQ_Test_App
             if (x.Count == 0 && y.Count == 0)
             {
                 Digits_TextBox.Foreground = Brushes.SpringGreen;
+                numTests++;
             }
             else
             {

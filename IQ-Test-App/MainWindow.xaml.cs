@@ -40,28 +40,31 @@ namespace IQ_Test_App
 
         private async Task StartTesting()
         {
-            time = (int)TimeChange.Value;
-            numDigits = (int)DigitsCount.Value;
-            System.Diagnostics.Debug.WriteLine(numDigits);
-            d1 = DateTime.Now;
-            StartButton.IsEnabled = false;
-            if (progressive_CheckBox.IsChecked is true)
+            if (numTests % 5 == 0 && numTests != 0)
             {
-                if (numTests % 5 == 0 && numTests != 0)
+                if (progressive_CheckBox.IsChecked is true)
                 {
                     DigitsCount.Value++;
                     LabelB_Update(DigitsCount.Value);
-                    numDigits = (int)DigitsCount.Value;
+                    numTests = 0;
                 }
-                if (numDigits < 8)
+                else if(progressiveSpeed_CheckBox.IsChecked is true)
                 {
-                    Digits_TextBox.FontSize = 48;
+                    TimeChange.Value--;
+                    LabelA_Update(TimeChange.Value);
                 }
-                else if (numDigits < 12)
-                {
-                    Digits_TextBox.FontSize = 36;
-                }
-
+            }
+            d1 = DateTime.Now;
+            StartButton.IsEnabled = false;
+            time = (int)TimeChange.Value;
+            numDigits = (int)DigitsCount.Value;
+            if (numDigits < 8)
+            {
+                Digits_TextBox.FontSize = 48;
+            }
+            else if (numDigits < 12)
+            {
+                Digits_TextBox.FontSize = 36;
             }
             Digits_TextBox.Focus();
 
@@ -253,6 +256,11 @@ namespace IQ_Test_App
             {
                 SendDigit(n);
             }
+        }
+
+        private void progressive_CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -1,7 +1,9 @@
 #################
 ## Eclipse
 #################
-
+.suo
+*.ide
+*.lock
 *.pydevproject
 .project
 .metadata

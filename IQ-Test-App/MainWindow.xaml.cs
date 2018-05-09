@@ -38,9 +38,12 @@ namespace IQ_Test_App
             }
         }
 
+        int examplesNum = 5;
+
         private async Task StartTesting()
         {
-            if (numTests % 5 == 0 && numTests != 0)
+            testStarted = true;
+            if (numTests % examplesNum == 0 && numTests != 0)
             {
                 if (progressive_CheckBox.IsChecked is true)
                 {
@@ -73,12 +76,14 @@ namespace IQ_Test_App
             ListenForDigits();
         }
 
+        bool testStarted = false;
         private void BreakTesting()
         {
             StartButton.IsEnabled = true;
             allowDigits = false;
             numTests = 0;
             Digits_TextBox.Text = "";
+            testStarted = false;
         }
 
         private void SaveLists(List<int> listA, List<int> listB)
@@ -247,7 +252,6 @@ namespace IQ_Test_App
             }
             if (e.Key == Key.Back)
             {
-                System.Diagnostics.Debug.WriteLine("aaa");
                 Undo();
             }
             string s = e.Key.ToString();
@@ -261,6 +265,22 @@ namespace IQ_Test_App
         private void progressive_CheckBox_Checked(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void NumExamples_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (testStarted) return;
+            string text = NumExamples.Text;
+            string s = e.Key.ToString();
+            if (s.Length < 2) return;
+            if(int.TryParse(s[s.Length - 1].ToString(), out int n))
+            {
+                if (n > 0)
+                {
+                    NumExamples.Text = n.ToString();
+                    examplesNum = n;
+                }
+            }
         }
     }
 }

@@ -5,20 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IQ_Test_App"
         mc:Ignorable="d"
-        Title="IQ Test" Height="367" Width="525" ResizeMode="NoResize" Icon="iq.ico" KeyUp="GetDigit">
+        Title="IQ Test" Height="434" Width="525" ResizeMode="NoResize" Icon="iq.ico" KeyUp="GetDigit">
     <Grid>
         <Grid Height="150" Margin="10,10,10,0" VerticalAlignment="Top">
             <Label Content="Digits:" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.528,0.082" Width="118" />
             <TextBox x:Name="Digits_TextBox" HorizontalAlignment="Center" Height="102" Margin="10,38,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="479" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="48" FontFamily="Verdana" FontWeight="Bold" IsReadOnly="True" Foreground="#FF18055B" />
         </Grid>
-        <Grid Margin="10,182,10,10">
-            <Button x:Name="StartButton" Content="Start Test" Margin="209,0,213,10" RenderTransformOrigin="0.566,1.417" Click="StartTest_Click" IsDefault="True" Height="25" VerticalAlignment="Bottom" />
+        <Grid Margin="10,182,10,10" HorizontalAlignment="Center">
+            <Button x:Name="StartButton" Content="Start Test" Margin="209,0,213,10" RenderTransformOrigin="0.566,1.417" Click="StartTest_Click" IsDefault="True" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Center" />
             <Label x:Name="LabelA" Content="Showing time:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.193,-0.222" Width="235" />
             <Slider x:Name="TimeChange" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="235" Height="30" Minimum="1" Value="5" TickPlacement="BottomRight" SmallChange="1" ValueChanged="TimeChange_ValueChanged" IsSnapToTickEnabled="True" Maximum="20" />
             <Label x:Name="DigitLabel" Content="Number of digits:" Margin="250,10,10,0" VerticalAlignment="Top" RenderTransformOrigin="-0.193,-0.222" />
             <Slider x:Name="DigitsCount" Margin="250,41,10,0" VerticalAlignment="Top" Height="30" Minimum="2" Maximum="20" SmallChange="1" Value="5" TickPlacement="BottomRight" ValueChanged="Numbers_ValueChanged" IsSnapToTickEnabled="True" />
             <CheckBox x:Name="progressive_CheckBox" Content="Progressive digit count" HorizontalAlignment="Left" Margin="250,76,0,0" VerticalAlignment="Top" Width="235" Height="17" IsChecked="True" OpacityMask="White" Background="White" Checked="progressive_CheckBox_Checked"/>
             <CheckBox x:Name="progressiveSpeed_CheckBox" Content="Progressive speed" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top" Width="235" Height="17" OpacityMask="White" Background="White" Checked="progressive_CheckBox_Checked"/>
+            <TextBox x:Name="NumExamples" HorizontalAlignment="Left" Height="23" Margin="10,112,0,0" TextWrapping="Wrap" Text="5" VerticalAlignment="Top" Width="16" BorderBrush="#FF7A7A7A" Background="White" SelectionBrush="White" OpacityMask="Black" IsManipulationEnabled="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Row="1" Grid.Column="1" UndoLimit="1" MaxLength="1" AllowDrop="False" IsHitTestVisible="True" CaretBrush="#00421717" KeyUp="NumExamples_KeyUp"/>
+            <Label Content="Examples before progression" HorizontalAlignment="Left" Margin="31,109,0,0" VerticalAlignment="Top" Width="225"/>
         </Grid>
     </Grid>
 </Window>
